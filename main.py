@@ -41,6 +41,7 @@ apply_channel_cache = {}
 """
 
 @bot.slash_command(name="register", description="Register your nation into the **Turnip** Database")
+@commands.has_role("Highborne Fae")
 async def register(ctx: discord.ApplicationContext, system: str, nation_id: int):
     system = system.upper()
 
@@ -71,6 +72,7 @@ async def register(ctx: discord.ApplicationContext, system: str, nation_id: int)
 """
 
 @bot.slash_command(name="who", description="Get nation information for a member in the server.")
+@commands.has_role("Highborne Fae")
 async def who(ctx: discord.ApplicationContext, system: str, member: discord.Member):
     system = system.upper()
 
@@ -156,6 +158,7 @@ async def who(ctx: discord.ApplicationContext, system: str, member: discord.Memb
 """
 
 @bot.slash_command(name="audit", description="Audit the nations in the user's alliance.")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
 async def audit(ctx: discord.ApplicationContext):
     await ctx.defer()
     
@@ -251,6 +254,7 @@ async def audit(ctx: discord.ApplicationContext):
 """ 
 
 @bot.slash_command(name="purge_application_channels", description="Deletes all of the current Application Channels in the server.")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
 async def purge_application_channels(ctx: discord.ApplicationContext):
     server_data = application_management.select("interview_channels").eq("server_id", ctx.guild.id).execute()
 
@@ -294,6 +298,7 @@ async def purge_application_channels(ctx: discord.ApplicationContext):
 """ 
 
 @bot.slash_command(name="vote", description="Start the voting process for an interview channel.")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
 async def vote(interaction: discord.Interaction, channel: discord.TextChannel):
     server_id = interaction.guild.id
     server_data = application_management.select("*").eq("server_id", server_id).execute().data
@@ -400,6 +405,7 @@ async def vote(interaction: discord.Interaction, channel: discord.TextChannel):
 """ 
 
 @bot.slash_command(name="set_system", description="Set the system for this server (PNW or DNS).")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
 async def set_system(ctx: discord.ApplicationContext, system: str):
     system = system.upper()
 
@@ -435,6 +441,7 @@ async def set_system(ctx: discord.ApplicationContext, system: str):
 """ 
 
 @bot.slash_command(name="set_interviewer_role", description="Set the interviewer role for application voting.")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
 async def set_interviewer_role(interaction: discord.Interaction, role: discord.Role):
     server_id = interaction.guild.id
     application_management.upsert(
@@ -463,6 +470,7 @@ async def set_interviewer_role(interaction: discord.Interaction, role: discord.R
 """ 
 
 @bot.slash_command(name="set_apply_channel", description="Set the channel where the application message will be sent.")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
 async def set_apply_channel(ctx: discord.ApplicationContext, channel: discord.TextChannel):
     button = discord.ui.Button(label="Confirm", style=discord.ButtonStyle.green)
 
@@ -721,6 +729,7 @@ async def start_application_process(interaction: discord.Interaction):
 """ 
 
 @bot.slash_command(name="set_interviewer_channel", description="Set the channel where the Interviewers will discuss.")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
 async def set_interviewer_channel(ctx: discord.ApplicationContext, channel: discord.TextChannel):
     button = discord.ui.Button(label="Confirm", style=discord.ButtonStyle.green)
 
@@ -772,7 +781,8 @@ async def set_interviewer_channel(ctx: discord.ApplicationContext, channel: disc
 """ 
 
 @bot.slash_command(name="set_application_category", description="Set the category for application channels.")
-async def set_category(ctx: discord.ApplicationContext, category_name: str):
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
+async def set_application_category(ctx: discord.ApplicationContext, category_name: str):
     button = discord.ui.Button(label="Confirm", style=discord.ButtonStyle.green)
 
     async def button_callback(interaction: discord.Interaction):
