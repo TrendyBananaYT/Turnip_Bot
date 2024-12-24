@@ -721,7 +721,7 @@ async def start_application_process(interaction: discord.Interaction):
 """ 
 
 @bot.slash_command(name="set_interviewer_channel", description="Set the channel where the Interviewers will discuss.")
-async def set_apply_channel(ctx: discord.ApplicationContext, channel: discord.TextChannel):
+async def set_interviewer_channel(ctx: discord.ApplicationContext, channel: discord.TextChannel):
     button = discord.ui.Button(label="Confirm", style=discord.ButtonStyle.green)
 
     async def button_callback(interaction: discord.Interaction):
