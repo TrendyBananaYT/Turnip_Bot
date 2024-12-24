@@ -30,23 +30,15 @@ apply_channel_cache = {}
 
 
 
-    
 
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
+"""
+  ____                   _         _                 
+ |  _ \    ___    __ _  (_)  ___  | |_    ___   _ __ 
+ | |_) |  / _ \  / _` | | | / __| | __|  / _ \ | '__|
+ |  _ <  |  __/ | (_| | | | \__ \ | |_  |  __/ | |   
+ |_| \_\  \___|  \__, | |_| |___/  \__|  \___| |_|   
+                  |___/
+"""
 
 @bot.slash_command(name="register", description="Register your nation into the **Turnip** Database")
 async def register(ctx: discord.ApplicationContext, system: str, nation_id: int):
@@ -70,25 +62,13 @@ async def register(ctx: discord.ApplicationContext, system: str, nation_id: int)
 
 
 
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
+"""
+ __        __  _             
+ \ \      / / | |__     ___  
+  \ \ /\ / /  | '_ \   / _ \ 
+   \ V  V /   | | | | | (_) |
+    \_/\_/    |_| |_|  \___/
+"""
 
 @bot.slash_command(name="who", description="Get nation information for a member in the server.")
 async def who(ctx: discord.ApplicationContext, system: str, member: discord.Member):
@@ -163,23 +143,17 @@ async def who(ctx: discord.ApplicationContext, system: str, member: discord.Memb
     elif system == "PNW":
         await ctx.respond("Hello, World!", ephemeral=False)
 
-        
-        
-        
-        
-        
-
-
-    
-
-
-
-    
 
 
 
 
-
+"""
+                        _   _   _   
+    / \     _   _    __| | (_) | |_ 
+   / _ \   | | | |  / _` | | | | __|
+  / ___ \  | |_| | | (_| | | | | |_ 
+ /_/   \_\  \__,_|  \__,_| |_|  \__|
+"""
 
 @bot.slash_command(name="audit", description="Audit the nations in the user's alliance.")
 async def audit(ctx: discord.ApplicationContext):
@@ -262,31 +236,19 @@ async def audit(ctx: discord.ApplicationContext):
             color=discord.Color.red()
         )
         await ctx.respond(embed=embed, ephemeral=True)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-
-    
+   
 
 
 
-    
-
-
-
-    
+     
+"""
+  ____                                       _                      _   _                  _     _                      ____   _                                      _       
+ |  _ \   _   _   _ __    __ _    ___       / \     _ __    _ __   | | (_)   ___    __ _  | |_  (_)   ___    _ __      / ___| | |__     __ _   _ __    _ __     ___  | |  ___ 
+ | |_) | | | | | | '__|  / _` |  / _ \     / _ \   | '_ \  | '_ \  | | | |  / __|  / _` | | __| | |  / _ \  | '_ \    | |     | '_ \   / _` | | '_ \  | '_ \   / _ \ | | / __|
+ |  __/  | |_| | | |    | (_| | |  __/    / ___ \  | |_) | | |_) | | | | | | (__  | (_| | | |_  | | | (_) | | | | |   | |___  | | | | | (_| | | | | | | | | | |  __/ | | \__ \
+ |_|      \__,_| |_|     \__, |  \___|   /_/   \_\ | .__/  | .__/  |_| |_|  \___|  \__,_|  \__| |_|  \___/  |_| |_|    \____| |_| |_|  \__,_| |_| |_| |_| |_|  \___| |_| |___/
+                         |___/                     |_|     |_|
+""" 
 
 @bot.slash_command(name="purge_application_channels", description="Deletes all of the current Application Channels in the server.")
 async def purge_application_channels(ctx: discord.ApplicationContext):
@@ -318,25 +280,18 @@ async def purge_application_channels(ctx: discord.ApplicationContext):
         color=discord.Color.green()
     )
     await ctx.respond(embed=embed, ephemeral=True)
-    
-    
-    
-
-
-    
+   
 
 
 
-    
-
-
-
-    
-
-
-
-    
-
+ 
+"""
+ __     __          _          
+ \ \   / /   ___   | |_    ___ 
+  \ \ / /   / _ \  | __|  / _ \
+   \ V /   | (_) | | |_  |  __/
+    \_/     \___/   \__|  \___|
+""" 
 
 @bot.slash_command(name="vote", description="Start the voting process for an interview channel.")
 async def vote(interaction: discord.Interaction, channel: discord.TextChannel):
@@ -433,19 +388,16 @@ async def vote(interaction: discord.Interaction, channel: discord.TextChannel):
 
 
 
-    
 
 
-
-    
-
-
-
-    
-
-
-
-    
+"""
+               _                                 _                      
+  ___    ___  | |_           ___   _   _   ___  | |_    ___   _ __ ___  
+ / __|  / _ \ | __|         / __| | | | | / __| | __|  / _ \ | '_ ` _ \ 
+ \__ \ |  __/ | |_          \__ \ | |_| | \__ \ | |_  |  __/ | | | | | |
+ |___/  \___|  \__|         |___/  \__, | |___/  \__|  \___| |_| |_| |_|
+                                   |___/
+""" 
 
 @bot.slash_command(name="set_system", description="Set the system for this server (PNW or DNS).")
 async def set_system(ctx: discord.ApplicationContext, system: str):
@@ -474,16 +426,13 @@ async def set_system(ctx: discord.ApplicationContext, system: str):
 
 
 
-
-
-
-
-
-
-
-
-
-
+"""
+  ____           _       ___           _                           _                       ____            _        
+ / ___|    ___  | |_    |_ _|  _ __   | |_    ___   _ __  __   __ (_)   ___  __      __   |  _ \    ___   | |   ___ 
+ \___ \   / _ \ | __|    | |  | '_ \  | __|  / _ \ | '__| \ \ / / | |  / _ \ \ \ /\ / /   | |_) |  / _ \  | |  / _ \
+  ___) | |  __/ | |_     | |  | | | | | |_  |  __/ | |     \ V /  | | |  __/  \ V  V /    |  _ <  | (_) | | | |  __/
+ |____/   \___|  \__|   |___| |_| |_|  \__|  \___| |_|      \_/   |_|  \___|   \_/\_/     |_| \_\  \___/  |_|  \___|
+""" 
 
 @bot.slash_command(name="set_interviewer_role", description="Set the interviewer role for application voting.")
 async def set_interviewer_role(interaction: discord.Interaction, role: discord.Role):
@@ -502,22 +451,16 @@ async def set_interviewer_role(interaction: discord.Interaction, role: discord.R
 
 
 
-    
 
 
-
-    
-
-
-
-    
-
-
-
-    
-
-
-
+"""
+  ____           _          _                      _              ____   _                                      _ 
+ / ___|    ___  | |_       / \     _ __    _ __   | |  _   _     / ___| | |__     __ _   _ __    _ __     ___  | |
+ \___ \   / _ \ | __|     / _ \   | '_ \  | '_ \  | | | | | |   | |     | '_ \   / _` | | '_ \  | '_ \   / _ \ | |
+  ___) | |  __/ | |_     / ___ \  | |_) | | |_) | | | | |_| |   | |___  | | | | | (_| | | | | | | | | | |  __/ | |
+ |____/   \___|  \__|   /_/   \_\ | .__/  | .__/  |_|  \__, |    \____| |_| |_|  \__,_| |_| |_| |_| |_|  \___| |_|
+                                  |_|     |_|          |___/
+""" 
 
 @bot.slash_command(name="set_apply_channel", description="Set the channel where the application message will be sent.")
 async def set_apply_channel(ctx: discord.ApplicationContext, channel: discord.TextChannel):
@@ -564,26 +507,14 @@ async def set_apply_channel(ctx: discord.ApplicationContext, channel: discord.Te
 
 
 
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
-
+"""
+  ____                       _        _                      _             __  __                                           
+ / ___|    ___   _ __     __| |      / \     _ __    _ __   | |  _   _    |  \/  |   ___   ___   ___    __ _    __ _    ___ 
+ \___ \   / _ \ | '_ \   / _` |     / _ \   | '_ \  | '_ \  | | | | | |   | |\/| |  / _ \ / __| / __|  / _` |  / _` |  / _ \
+  ___) | |  __/ | | | | | (_| |    / ___ \  | |_) | | |_) | | | | |_| |   | |  | | |  __/ \__ \ \__ \ | (_| | | (_| | |  __/
+ |____/   \___| |_| |_|  \__,_|   /_/   \_\ | .__/  | .__/  |_|  \__, |   |_|  |_|  \___| |___/ |___/  \__,_|  \__, |  \___|
+                                            |_|     |_|          |___/                                         |___/
+""" 
 
 async def send_apply_message(channel: discord.TextChannel):
     button = discord.ui.Button(label="Apply Now 🚀", style=discord.ButtonStyle.success)
@@ -615,25 +546,14 @@ async def send_apply_message(channel: discord.TextChannel):
 
 
 
-
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
-
+"""
+  ____    _                    _          _                      _   _                  _     _                     ____                                           
+ / ___|  | |_    __ _   _ __  | |_       / \     _ __    _ __   | | (_)   ___    __ _  | |_  (_)   ___    _ __     |  _ \   _ __    ___     ___    ___   ___   ___ 
+ \___ \  | __|  / _` | | '__| | __|     / _ \   | '_ \  | '_ \  | | | |  / __|  / _` | | __| | |  / _ \  | '_ \    | |_) | | '__|  / _ \   / __|  / _ \ / __| / __|
+  ___) | | |_  | (_| | | |    | |_     / ___ \  | |_) | | |_) | | | | | | (__  | (_| | | |_  | | | (_) | | | | |   |  __/  | |    | (_) | | (__  |  __/ \__ \ \__ \
+ |____/   \__|  \__,_| |_|     \__|   /_/   \_\ | .__/  | .__/  |_| |_|  \___|  \__,_|  \__| |_|  \___/  |_| |_|   |_|     |_|     \___/   \___|  \___| |___/ |___/
+                                                |_|     |_|
+""" 
 
 async def start_application_process(interaction: discord.Interaction):
     modal = discord.ui.Modal(
@@ -791,21 +711,14 @@ async def start_application_process(interaction: discord.Interaction):
 
 
 
-    
 
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
+"""
+  ____           _       ___           _                           _                                      ____   _                                      _ 
+ / ___|    ___  | |_    |_ _|  _ __   | |_    ___   _ __  __   __ (_)   ___  __      __   ___   _ __     / ___| | |__     __ _   _ __    _ __     ___  | |
+ \___ \   / _ \ | __|    | |  | '_ \  | __|  / _ \ | '__| \ \ / / | |  / _ \ \ \ /\ / /  / _ \ | '__|   | |     | '_ \   / _` | | '_ \  | '_ \   / _ \ | |
+  ___) | |  __/ | |_     | |  | | | | | |_  |  __/ | |     \ V /  | | |  __/  \ V  V /  |  __/ | |      | |___  | | | | | (_| | | | | | | | | | |  __/ | |
+ |____/   \___|  \__|   |___| |_| |_|  \__|  \___| |_|      \_/   |_|  \___|   \_/\_/    \___| |_|       \____| |_| |_|  \__,_| |_| |_| |_| |_|  \___| |_|
+""" 
 
 @bot.slash_command(name="set_interviewer_channel", description="Set the channel where the Interviewers will discuss.")
 async def set_apply_channel(ctx: discord.ApplicationContext, channel: discord.TextChannel):
@@ -849,23 +762,16 @@ async def set_apply_channel(ctx: discord.ApplicationContext, channel: discord.Te
 
 
 
+"""
+  ____           _          _                      _   _                  _     _                      ____           _                                         
+ / ___|    ___  | |_       / \     _ __    _ __   | | (_)   ___    __ _  | |_  (_)   ___    _ __      / ___|   __ _  | |_    ___    __ _    ___    _ __   _   _ 
+ \___ \   / _ \ | __|     / _ \   | '_ \  | '_ \  | | | |  / __|  / _` | | __| | |  / _ \  | '_ \    | |      / _` | | __|  / _ \  / _` |  / _ \  | '__| | | | |
+  ___) | |  __/ | |_     / ___ \  | |_) | | |_) | | | | | | (__  | (_| | | |_  | | | (_) | | | | |   | |___  | (_| | | |_  |  __/ | (_| | | (_) | | |    | |_| |
+ |____/   \___|  \__|   /_/   \_\ | .__/  | .__/  |_| |_|  \___|  \__,_|  \__| |_|  \___/  |_| |_|    \____|  \__,_|  \__|  \___|  \__, |  \___/  |_|     \__, |
+                                  |_|     |_|                                                                                      |___/                  |___/
+""" 
 
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
-@bot.slash_command(name="set_category", description="Set the category for application channels.")
+@bot.slash_command(name="set_application_category", description="Set the category for application channels.")
 async def set_category(ctx: discord.ApplicationContext, category_name: str):
     button = discord.ui.Button(label="Confirm", style=discord.ButtonStyle.green)
 
@@ -915,22 +821,14 @@ async def set_category(ctx: discord.ApplicationContext, category_name: str):
 
 
 
-
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
+"""
+  ____                 _                                _      ____            _             __  __                                           
+ |  _ \    ___   ___  | |_    ___    _ __    ___       / \    |  _ \   _ __   | |  _   _    |  \/  |   ___   ___   ___    __ _    __ _    ___ 
+ | |_) |  / _ \ / __| | __|  / _ \  | '__|  / _ \     / _ \   | |_) | | '_ \  | | | | | |   | |\/| |  / _ \ / __| / __|  / _` |  / _` |  / _ \
+ |  _ <  |  __/ \__ \ | |_  | (_) | | |    |  __/    / ___ \  |  __/  | |_) | | | | |_| |   | |  | | |  __/ \__ \ \__ \ | (_| | | (_| | |  __/
+ |_| \_\  \___| |___/  \__|  \___/  |_|     \___|   /_/   \_\ |_|     | .__/  |_|  \__, |   |_|  |_|  \___| |___/ |___/  \__,_|  \__, |  \___|
+                                                                      |_|          |___/                                         |___/
+""" 
 
 async def restore_apply_message(guild):
     server_data = application_management.select("*").eq("server_id", guild.id).execute()
