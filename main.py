@@ -27,7 +27,9 @@ bot = discord.Bot(intents=intents)
 
 apply_channel_cache = {}
 
-
+@bot.slash_command(name="ping", description="pinger")
+async def ping(ctx: discord.ApplicationContext):
+    await ctx.respond(f"Pong! ({bot.latency * 1000:.2f}ms)", ephemeral=False)
 
 
 
@@ -41,7 +43,7 @@ apply_channel_cache = {}
 """
 
 @bot.slash_command(name="register", description="Register your nation into the **Turnip** Database")
-@commands.has_role("Highborne Fae")
+@commands.has_role("Highborn Fae")
 async def register(ctx: discord.ApplicationContext, system: str, nation_id: int):
     system = system.upper()
 
@@ -72,7 +74,7 @@ async def register(ctx: discord.ApplicationContext, system: str, nation_id: int)
 """
 
 @bot.slash_command(name="who", description="Get nation information for a member in the server.")
-@commands.has_role("Highborne Fae")
+@commands.has_role("Highborn Fae")
 async def who(ctx: discord.ApplicationContext, system: str, member: discord.Member):
     system = system.upper()
 
@@ -528,7 +530,9 @@ async def send_apply_message(channel: discord.TextChannel):
     button = discord.ui.Button(label="Apply Now 🚀", style=discord.ButtonStyle.success)
 
     async def button_callback(interaction: discord.Interaction):
-        await start_application_process(interaction)
+        interaction.defer()
+
+        await start_application_process(interaction, interaction.user.mention)
 
     button.callback = button_callback
     view = discord.ui.View()
@@ -563,7 +567,7 @@ async def send_apply_message(channel: discord.TextChannel):
                                                 |_|     |_|
 """ 
 
-async def start_application_process(interaction: discord.Interaction):
+async def start_application_process(interaction: discord.Interaction, member):
     modal = discord.ui.Modal(
         title="Application Form",
         custom_id="nation_id_modal",
@@ -661,19 +665,42 @@ async def start_application_process(interaction: discord.Interaction):
             
             population = nation_data["Pop"]
             alliance_name = nation_data["Alliance"]
+        
+            if isinstance(nation_data, list):
+                nation_data = nation_data[0] if nation_data else {}
+
+            nation_name = nation_data['NationName']
+            leader_name = nation_data["LeaderName"]
+            if leader_name == "0":
+                leader_name = "None"
+                
+            population = nation_data["Pop"]
+            alliance_name = nation_data["Alliance"]
 
             embed = discord.Embed(
-                title=f"Nation Information: {nation_name}",
-                description=f"Details for {modal_interaction.user.mention}'s nation:",  # Mentions the user who applied
+                title=f"🌍 Nation Information: **{nation_name}**",
+                description=f"Details for {member}'s nation:\n\n"
+                            f"👑 **Leader**: {leader_name}\n"
+                            f"👥 **Population**: {population:,}\n"
+                            f"🤝 **Alliance**: {alliance_name}\n",
                 color=discord.Color.gold()
             )
-            
-            embed.add_field(name="Nation ID", value=nation_id, inline=True)
-            embed.add_field(name="Nation Name", value=nation_name, inline=True)
-            embed.add_field(name="Leader Name", value=leader_name, inline=True)
-            embed.add_field(name="Population", value="{:,}".format(population), inline=True)
-            embed.add_field(name="Alliance Name", value=alliance_name, inline=True)
-            embed.set_footer(text="Powered by Diplomacy and Strife API")
+
+            embed.add_field(name="🆔 Nation ID", value=nation_id, inline=True)
+            embed.add_field(name="🌍 Nation Name", value=nation_name, inline=True)
+
+            embed.add_field(
+                name="━━━━━━━━━━━━━━━━━",
+                value="**Additional Information**",
+                inline=False
+            )
+
+            embed.add_field(name="👑 Leader Name", value=leader_name, inline=True)
+            embed.add_field(name="👥 Population", value=f"{population:,}", inline=True)
+            embed.add_field(name="🤝 Alliance Name", value=alliance_name, inline=True)
+
+            embed.set_footer(text="Powered by Amelia's Turnip Bot", icon_url="https://cdn.discordapp.com/app-icons/1284676867734896763/016050f68cca8915bd7254b870a898d7.png?size=512")
+            #embed.set_thumbnail(url="https://example.com/nation-flag.png")
 
             message = await new_channel.send(embed=embed)
             await message.pin()
@@ -685,7 +712,7 @@ async def start_application_process(interaction: discord.Interaction):
             )
             embed = discord.Embed(
                 title="Hello World",
-                description="This is a simple 'Hello World' message for PNW servers.",
+                description="'Hello World' message for PNW servers.",
                 color=discord.Color.green()
             )
             message = await new_channel.send(embed=embed)
@@ -854,7 +881,9 @@ async def restore_apply_message(guild):
                         button = discord.ui.Button(label="Apply Now 🚀", style=discord.ButtonStyle.success)
 
                         async def button_callback(interaction: discord.Interaction):
-                            await start_application_process(interaction)
+                            interaction.defer()
+
+                            await start_application_process(interaction, interaction.user.mention)
 
                         button.callback = button_callback
                         view = discord.ui.View()
