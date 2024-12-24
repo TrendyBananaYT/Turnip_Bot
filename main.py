@@ -50,13 +50,6 @@ apply_channel_cache = {}
 
 @bot.slash_command(name="register", description="Register your nation into the **Turnip** Database")
 async def register(ctx: discord.ApplicationContext, system: str, nation_id: int):
-    """
-    Register your nation into the Turnip Database.
-
-    Parameters:
-        system (str): Either 'PNW' or 'DNS' to specify the system.
-        nation_id (int): The nation ID for the specified system.
-    """
     system = system.upper()
 
     if system not in ["PNW", "DNS"]:
