@@ -20,6 +20,7 @@ supabase: Client = create_client(
 )
 
 application_management = supabase.table("application_management")
+suggestions = supabase.table("suggestions")
 registered_nations = supabase.table("registered_nations")
 
 intents = discord.Intents.all()
@@ -32,6 +33,31 @@ async def ping(ctx: discord.ApplicationContext):
     await ctx.respond(f"Pong! ({bot.latency * 1000:.2f}ms)", ephemeral=False)
 
 
+@bot.slash_command(name="suggest", description="Send a suggestion to Amelia to help improve Turnip!")
+async def suggest(ctx: discord.ApplicationContext, suggestion: str):
+    row = suggestions.select("*").eq("suggestor", ctx.user.id).execute().data
+
+    if len(row) > 0:
+        suggest = row[0]["suggestions"]
+        suggest.append(suggestion)
+    else:
+        suggest = [suggestion]
+        
+    suggestions.upsert(
+        {
+            "suggestor": ctx.user.id,
+            "suggestions": suggest
+        },
+        on_conflict=["suggestor"]
+    ).execute()
+    
+    await ctx.respond(f"Suggestion `{suggestion}' sent!", ephemeral=True)
+    
+    channel = bot.get_channel(1314592749407699079)
+    
+    await channel.send(f"<@860564164828725299> **NEW SUGGESTION:**\n```{suggestion}```")
+    
+    
 
 """
   ____                   _         _                 
@@ -75,7 +101,7 @@ async def register(ctx: discord.ApplicationContext, system: str, nation_id: int)
 
 @bot.slash_command(name="who", description="Get nation information for a member in the server.")
 @commands.has_role("Highborn Fae")
-async def who(ctx: discord.ApplicationContext, member: discord.Member):
+async def who(ctx: discord.ApplicationContext, member: discord.Member = None, nation_id: int = None):
     system = application_management.select("*").eq("server_id", ctx.guild.id).execute().data[0].get("system").lower()
 
     system = system.upper()
@@ -86,17 +112,33 @@ async def who(ctx: discord.ApplicationContext, member: discord.Member):
 
     nation_field = "pnw_id" if system == "PNW" else "dns_id"
     
-    result = registered_nations.select(nation_field).eq("discord_user_id", member.id).execute()
-    
-    if not result.data:
-        await ctx.respond(f"{member.mention} is not registered in the database. They need to use `/register` first.", ephemeral=True)
-        return
+    if nation_id is None:
+        if not member:
+            await ctx.respond("You must provide either a member or a nation ID.", ephemeral=True)
+            return
 
-    nation_id = result.data[0].get(nation_field)
+        result = registered_nations.select(nation_field).eq("discord_user_id", member.id).execute()
+        
+        if not result.data:
+            await ctx.respond(f"{member.mention} is not registered in the database. They need to use `/register` first.", ephemeral=True)
+            return
 
-    if not nation_id:
-        await ctx.respond(f"{member.mention} does not have a {system} nation ID registered.", ephemeral=True)
-        return
+        nation_id = result.data[0].get(nation_field)
+
+        if not nation_id:
+            await ctx.respond(f"{member.mention} does not have a {system} nation ID registered.", ephemeral=True)
+            return
+        
+        mention = member.mention
+    else:
+        id = registered_nations.select("discord_user_id").eq("dns_id", nation_id).execute()
+        id = f"{id}"
+        id = id.split("data=[{'discord_user_id': ")        
+        id = f"{id[1]}"
+        id = id.split("}] count=None")
+        id = id[0]
+        
+        mention = f"<@{id}>"
 
     if system == "DNS":
         r = httpx.get(f'https://diplomacyandstrifeapi.com/api/nation?APICode={DNS_API}&NationId={nation_id}')
@@ -116,11 +158,13 @@ async def who(ctx: discord.ApplicationContext, member: discord.Member):
             leader_name = "None"
             
         population = nation_data["Pop"]
+        population = round(population)
+        
         alliance_name = nation_data["Alliance"]
 
         embed = discord.Embed(
             title=f"🌍 Nation Information: **{nation_name}**",
-            description=f"Details for {member.mention}'s nation:\n\n"
+            description=f"Details for {mention}'s nation:\n\n"
                         f"👑 **Leader**: {leader_name}\n"
                         f"👥 **Population**: {population:,}\n"
                         f"🤝 **Alliance**: {alliance_name}\n",
