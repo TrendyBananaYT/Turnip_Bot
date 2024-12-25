@@ -162,7 +162,7 @@ async def who(ctx: discord.ApplicationContext, member: discord.Member):
 """
 
 @bot.slash_command(name="audit", description="Audit the nations in the user's alliance.")
-@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress", "Admin")
 async def audit(ctx: discord.ApplicationContext):
     await ctx.defer()
     
@@ -234,7 +234,7 @@ async def audit(ctx: discord.ApplicationContext):
                     embed.add_field(name=f"\n\n🌍 Nation: {nation_name}\n", value=output, inline=False)
 
                 
-        await ctx.respond(embed=embed, ephemeral=True)
+        await ctx.respond(embed=embed, ephemeral=False)
         
     else:
         embed = discord.Embed(
@@ -258,7 +258,7 @@ async def audit(ctx: discord.ApplicationContext):
 """ 
 
 @bot.slash_command(name="purge_application_channels", description="Deletes all of the current Application Channels in the server.")
-@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress", "Admin")
 async def purge_application_channels(ctx: discord.ApplicationContext):
     server_data = application_management.select("interview_channels").eq("server_id", ctx.guild.id).execute()
 
@@ -287,7 +287,7 @@ async def purge_application_channels(ctx: discord.ApplicationContext):
         description="All application channels have been deleted.",
         color=discord.Color.green()
     )
-    await ctx.respond(embed=embed, ephemeral=True)
+    await ctx.respond(embed=embed, ephemeral=False)
    
 
 
@@ -302,7 +302,7 @@ async def purge_application_channels(ctx: discord.ApplicationContext):
 """ 
 
 @bot.slash_command(name="vote", description="Start the voting process for an interview channel.")
-@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress", "Admin")
 async def vote(interaction: discord.Interaction, channel: discord.TextChannel):
     server_id = interaction.guild.id
     server_data = application_management.select("*").eq("server_id", server_id).execute().data
@@ -358,7 +358,7 @@ async def vote(interaction: discord.Interaction, channel: discord.TextChannel):
 
     interviewer_channel = interaction.guild.get_channel(interviewer_channel_id)
     threads = interviewer_channel.threads
-    archived_threads = [t async for t in interviewer_channel.archived_threads(limit=50)]  # Fetch archived threads
+    archived_threads = [t async for t in interviewer_channel.archived_threads(limit=50)]
 
     all_threads = list(threads) + archived_threads
 
@@ -385,7 +385,7 @@ async def vote(interaction: discord.Interaction, channel: discord.TextChannel):
     await message.add_reaction("✅")
     await message.add_reaction("❌")
     
-    await interaction.response.send_message(f"The thread '{thread.name}' has been unlocked.", ephemeral=True)
+    #await interaction.response.send_message(f"The thread '{thread.name}' has been unlocked.", ephemeral=False)
 
     embed = discord.Embed(
         title="✅ Voting Opened",
@@ -393,7 +393,7 @@ async def vote(interaction: discord.Interaction, channel: discord.TextChannel):
                     f"The discussion thread {thread.mention} is now unlocked.",
         color=discord.Color.green()
     )
-    await interaction.response.send_message(embed=embed, ephemeral=True)
+    await interaction.response.send_message(embed=embed, ephemeral=False)
 
 
 
@@ -409,7 +409,7 @@ async def vote(interaction: discord.Interaction, channel: discord.TextChannel):
 """ 
 
 @bot.slash_command(name="set_system", description="Set the system for this server (PNW or DNS).")
-@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress", "Admin")
 async def set_system(ctx: discord.ApplicationContext, system: str):
     system = system.upper()
 
@@ -430,7 +430,7 @@ async def set_system(ctx: discord.ApplicationContext, system: str):
         description=f"The system has been set to {system} for this server.",
         color=discord.Color.green()
     )
-    await ctx.respond(embed=embed, ephemeral=True)
+    await ctx.respond(embed=embed, ephemeral=False)
 
 
 
@@ -445,7 +445,7 @@ async def set_system(ctx: discord.ApplicationContext, system: str):
 """ 
 
 @bot.slash_command(name="set_interviewer_role", description="Set the interviewer role for application voting.")
-@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress", "Admin")
 async def set_interviewer_role(interaction: discord.Interaction, role: discord.Role):
     server_id = interaction.guild.id
     application_management.upsert(
@@ -458,7 +458,7 @@ async def set_interviewer_role(interaction: discord.Interaction, role: discord.R
         description=f"The interviewer role has been set to {role.mention}.",
         color=discord.Color.green()
     )
-    await interaction.response.send_message(embed=embed, ephemeral=True)
+    await interaction.response.send_message(embed=embed, ephemeral=False)
 
 
 
@@ -474,7 +474,7 @@ async def set_interviewer_role(interaction: discord.Interaction, role: discord.R
 """ 
 
 @bot.slash_command(name="set_apply_channel", description="Set the channel where the application message will be sent.")
-@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress", "Admin")
 async def set_apply_channel(ctx: discord.ApplicationContext, channel: discord.TextChannel):
     button = discord.ui.Button(label="Confirm", style=discord.ButtonStyle.green)
 
@@ -501,7 +501,7 @@ async def set_apply_channel(ctx: discord.ApplicationContext, channel: discord.Te
             description=f"The application message has been sent to {channel.mention}.",
             color=discord.Color.green()
         )
-        await ctx.respond(embed=embed, ephemeral=True)
+        await ctx.respond(embed=embed, ephemeral=False)
 
     button.callback = button_callback
     view = discord.ui.View()
@@ -758,7 +758,7 @@ async def start_application_process(interaction: discord.Interaction, member):
 """ 
 
 @bot.slash_command(name="set_interviewer_channel", description="Set the channel where the Interviewers will discuss.")
-@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress", "Admin")
 async def set_interviewer_channel(ctx: discord.ApplicationContext, channel: discord.TextChannel):
     button = discord.ui.Button(label="Confirm", style=discord.ButtonStyle.green)
 
@@ -782,7 +782,7 @@ async def set_interviewer_channel(ctx: discord.ApplicationContext, channel: disc
             description=f"The Interviewer channel has been set to {channel.mention}.",
             color=discord.Color.green()
         )
-        await ctx.respond(embed=embed, ephemeral=True)
+        await ctx.respond(embed=embed, ephemeral=False)
 
     button.callback = button_callback
     view = discord.ui.View()
@@ -810,7 +810,7 @@ async def set_interviewer_channel(ctx: discord.ApplicationContext, channel: disc
 """ 
 
 @bot.slash_command(name="set_application_category", description="Set the category for application channels.")
-@commands.has_any_role("Court Highness", "Court Monarch", "Empress")
+@commands.has_any_role("Court Highness", "Court Monarch", "Empress", "Admin")
 async def set_application_category(ctx: discord.ApplicationContext, category_name: str):
     button = discord.ui.Button(label="Confirm", style=discord.ButtonStyle.green)
 
@@ -842,7 +842,7 @@ async def set_application_category(ctx: discord.ApplicationContext, category_nam
             description=f"The application category has been set to '{category_name}'.",
             color=discord.Color.green()
         )
-        await ctx.respond(embed=embed, ephemeral=True)
+        await ctx.respond(embed=embed, ephemeral=False)
 
     button.callback = button_callback
     view = discord.ui.View()
