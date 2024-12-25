@@ -75,7 +75,9 @@ async def register(ctx: discord.ApplicationContext, system: str, nation_id: int)
 
 @bot.slash_command(name="who", description="Get nation information for a member in the server.")
 @commands.has_role("Highborn Fae")
-async def who(ctx: discord.ApplicationContext, system: str, member: discord.Member):
+async def who(ctx: discord.ApplicationContext, member: discord.Member):
+    system = application_management.select("*").eq("server_id", ctx.guild.id).execute().data[0].get("system").lower()
+
     system = system.upper()
 
     if system not in ["PNW", "DNS"]:
@@ -530,8 +532,6 @@ async def send_apply_message(channel: discord.TextChannel):
     button = discord.ui.Button(label="Apply Now 🚀", style=discord.ButtonStyle.success)
 
     async def button_callback(interaction: discord.Interaction):
-        interaction.defer()
-
         await start_application_process(interaction, interaction.user.mention)
 
     button.callback = button_callback
@@ -568,6 +568,8 @@ async def send_apply_message(channel: discord.TextChannel):
 """ 
 
 async def start_application_process(interaction: discord.Interaction, member):
+    interaction.response.defer()
+
     modal = discord.ui.Modal(
         title="Application Form",
         custom_id="nation_id_modal",
@@ -881,8 +883,6 @@ async def restore_apply_message(guild):
                         button = discord.ui.Button(label="Apply Now 🚀", style=discord.ButtonStyle.success)
 
                         async def button_callback(interaction: discord.Interaction):
-                            interaction.defer()
-
                             await start_application_process(interaction, interaction.user.mention)
 
                         button.callback = button_callback
